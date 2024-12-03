@@ -37,7 +37,8 @@ assert _summary_path is not None
 _SUMMARY = Path(_summary_path).open("a")
 
 _RENDER_SUMMARY = os.getenv("GHA_SIGSTORE_PYTHON_SUMMARY", "true") == "true"
-_DEBUG = os.getenv("GHA_SIGSTORE_PYTHON_INTERNAL_BE_CAREFUL_DEBUG", "false") != "false"
+_DEBUG = os.getenv("GHA_SIGSTORE_PYTHON_INTERNAL_BE_CAREFUL_DEBUG", "false") != "false" or \
+    os.getenv("ACTIONS_STEP_DEBUG", "false") == "true"
 
 _RELEASE_SIGNING_ARTIFACTS = (
     os.getenv("GHA_SIGSTORE_PYTHON_RELEASE_SIGNING_ARTIFACTS", "true") == "true"
@@ -86,12 +87,12 @@ def _download_ref_asset(ext):
 
 
 def _sigstore_sign(global_args, sign_args):
-    return ["python", "-m", "sigstore", *global_args, "sign", *sign_args]
+    return [sys.executable, "-m", "sigstore", *global_args, "sign", *sign_args]
 
 
 def _sigstore_verify(global_args, verify_args):
     return [
-        "python",
+        sys.executable,
         "-m",
         "sigstore",
         *global_args,
@@ -146,40 +147,6 @@ client_secret = os.getenv("GHA_SIGSTORE_PYTHON_OIDC_CLIENT_SECRET")
 if client_secret:
     sigstore_sign_args.extend(["--oidc-client-secret", client_secret])
 
-signature = os.getenv("GHA_SIGSTORE_PYTHON_SIGNATURE")
-if signature:
-    sigstore_sign_args.extend(["--signature", signature])
-    sigstore_verify_args.extend(["--signature", signature])
-    signing_artifact_paths.append(signature)
-
-certificate = os.getenv("GHA_SIGSTORE_PYTHON_CERTIFICATE")
-if certificate:
-    sigstore_sign_args.extend(["--certificate", certificate])
-    sigstore_verify_args.extend(["--certificate", certificate])
-    signing_artifact_paths.append(certificate)
-
-bundle = os.getenv("GHA_SIGSTORE_PYTHON_BUNDLE")
-if bundle:
-    sigstore_sign_args.extend(["--bundle", bundle])
-    sigstore_verify_args.extend(["--bundle", bundle])
-    signing_artifact_paths.append(bundle)
-
-fulcio_url = os.getenv("GHA_SIGSTORE_PYTHON_FULCIO_URL")
-if fulcio_url:
-    sigstore_sign_args.extend(["--fulcio-url", fulcio_url])
-
-rekor_url = os.getenv("GHA_SIGSTORE_PYTHON_REKOR_URL")
-if rekor_url:
-    sigstore_global_args.extend(["--rekor-url", rekor_url])
-
-ctfe = os.getenv("GHA_SIGSTORE_PYTHON_CTFE")
-if ctfe:
-    sigstore_sign_args.extend(["--ctfe", ctfe])
-
-rekor_root_pubkey = os.getenv("GHA_SIGSTORE_PYTHON_REKOR_ROOT_PUBKEY")
-if rekor_root_pubkey:
-    sigstore_global_args.extend(["--rekor-root-pubkey", rekor_root_pubkey])
-
 if os.getenv("GHA_SIGSTORE_PYTHON_STAGING", "false") != "false":
     sigstore_global_args.append("--staging")
 
@@ -229,7 +196,7 @@ for input_ in inputs:
         signing_artifact_paths.append(str(file_))
 
         if "--bundle" not in sigstore_sign_args:
-            signing_artifact_paths.append(f"{file_}.sigstore")
+            signing_artifact_paths.append(f"{file_}.sigstore.json")
 
     sigstore_sign_args.extend([str(f) for f in files])
     sigstore_verify_args.extend([str(f) for f in files])
