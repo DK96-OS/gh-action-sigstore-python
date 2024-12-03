@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: install
         run: python -m pip install .
-      - uses: sigstore/gh-action-sigstore-python@v2.1.1
+      - uses: sigstore/gh-action-sigstore-python@v3.0.0
         with:
           inputs: file.txt
 ```
@@ -53,7 +53,7 @@ provided unless [release-signing-artifacts](#release-signing-artifacts) is set t
 To sign one or more files:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file0.txt file1.txt file2.txt
 ```
@@ -61,7 +61,7 @@ To sign one or more files:
 The `inputs` argument also supports file globbing:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: ./path/to/inputs/*.txt
 ```
@@ -70,7 +70,7 @@ Multiple lines are fine, and whitespace in filenames can also be escaped using
 POSIX shell lexing rules:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: |
       ./path/to/inputs/*.txt
@@ -90,7 +90,7 @@ The `identity-token` setting controls the OpenID Connect token provided to Fulci
 workflow will use the credentials found in the GitHub Actions environment.
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     identity-token: ${{ IDENTITY_TOKEN  }} # assigned elsewhere
@@ -106,7 +106,7 @@ Server during OAuth2.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     oidc-client-id: alternative-sigstore-id
@@ -122,149 +122,10 @@ Connect Server during OAuth2.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     oidc-client-secret: alternative-sigstore-secret
-```
-
-### `signature`
-
-**Default**: Empty (signature files will get named as `{input}.sig`)
-
-The `signature` setting controls the name of the output signature file. This setting does not work
-when signing multiple input files.
-
-Example:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file.txt
-    signature: custom-signature-filename.sig
-```
-
-However, this example is invalid:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file0.txt file1.txt file2.txt
-    signature: custom-signature-filename.sig
-```
-
-### `certificate`
-
-**Default**: Empty (certificate files will get named as `{input}.crt`)
-
-The `certificate` setting controls the name of the output certificate file. This setting does not
-work when signing multiple input files.
-
-Example:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file.txt
-    certificate: custom-certificate-filename.crt
-```
-
-However, this example is invalid:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file0.txt file1.txt file2.txt
-    certificate: custom-certificate-filename.crt
-```
-
-### `bundle`
-
-**Default**: Empty (bundle files will get named as `{input}.sigstore`)
-
-The `bundle` setting controls the name of the output Sigstore bundle. This setting does not work
-when signing multiple input files.
-
-Example:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file.txt
-    bundle: custom-bundle.sigstore
-```
-
-However, this example is invalid:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file0.txt file1.txt file2.txt
-    certificate: custom-bundle.sigstore
-```
-
-### `fulcio-url`
-
-**Default**: `https://fulcio.sigstore.dev`
-
-The `fulcio-url` setting controls the Fulcio instance to retrieve the ephemeral signing certificate
-from. This setting cannot be used in combination with the `staging` setting.
-
-Example:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file.txt
-    fulcio-url: https://fulcio.sigstage.dev
-```
-
-### `rekor-url`
-
-**Default**: `https://rekor.sigstore.dev`
-
-The `rekor-url` setting controls the Rekor instance to upload the file signature to. This setting
-cannot be used in combination with the `staging` setting.
-
-Example:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file.txt
-    rekor-url: https://rekor.sigstage.dev
-```
-
-### `ctfe`
-
-**Default**: `ctfe.pub` (the CTFE key embedded in `sigstore-python`)
-
-The `ctfe` setting is a path to a PEM-encoded public key for the CT log. This setting cannot be used
-in combination with the `staging` setting.
-
-Example:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file.txt
-    ctfe: ./path/to/ctfe.pub
-```
-
-### `rekor-root-pubkey`
-
-**Default**: `rekor.pub` (the Rekor key embedded in `sigstore-python`)
-
-The `rekor-root-pubkey` setting is a path to a PEM-encoded public key for Rekor. This setting cannot
-be used in combination with `staging` setting.
-
-Example:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    inputs: file.txt
-    ctfe: ./path/to/rekor.pub
 ```
 
 ### `staging`
@@ -277,7 +138,7 @@ instead of the default production instances.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     staging: true
@@ -300,7 +161,7 @@ and `verify-oidc-issuer` settings. Failing to pass these will produce an error.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     verify: true
@@ -323,7 +184,7 @@ This setting may only be used in conjunction with `verify-oidc-issuer`.
 Supplying it without `verify-oidc-issuer` will produce an error.
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     verify: true
@@ -348,7 +209,7 @@ Supplying it without `verify-cert-identity` will produce an error.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     verify: true
@@ -370,7 +231,7 @@ workflow artifact retention period is used.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     upload-signing-artifacts: true
@@ -378,7 +239,7 @@ Example:
 
 ### `release-signing-artifacts`
 
-**Default**: `false`
+**Default**: `true`
 
 The `release-signing-artifacts` setting controls whether or not `sigstore-python`
 uploads signing artifacts to the release publishing event that triggered this run.
@@ -386,8 +247,6 @@ This setting has no effect on non-`release` events.
 
 If enabled, this setting also re-uploads and signs GitHub's default source code artifacts,
 as they are not guaranteed to be stable.
-
-By default, no release assets are uploaded.
 
 Requires the [`contents: write` permission](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token).
 
@@ -399,15 +258,14 @@ permissions:
 
 # ...
 
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
   with:
     inputs: file.txt
     release-signing-artifacts: true
 ```
 
 On release events, it is also valid to have no explicit inputs. When used on release
-events with `release-signing-artifacts: true`, this action will sign any pre-existing
-release artifacts:
+events, this action will sign any pre-existing release artifacts:
 
 ```yaml
 permissions:
@@ -415,10 +273,8 @@ permissions:
 
 # ...
 
-- uses: sigstore/gh-action-sigstore-python@v2.1.1
-  with:
-    # Only valid on release events
-    release-signing-artifacts: true
+# no explicit settings needed, signs all pre-existing release artifacts
+- uses: sigstore/gh-action-sigstore-python@v3.0.0
 ```
 
 ### Internal options
@@ -442,7 +298,7 @@ permissions:
   Example:
 
   ```yaml
-  - uses: sigstore/gh-action-sigstore-python@v2.1.1
+  - uses: sigstore/gh-action-sigstore-python@v3.0.0
     with:
       inputs: file.txt
       internal-be-careful-debug: true
