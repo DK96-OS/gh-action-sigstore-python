@@ -200,8 +200,8 @@ for input_ in inputs:
         if "--bundle" not in sigstore_sign_args:
             signing_artifact_paths.append(f"{file_}.sigstore.json")
 
-    sigstore_sign_args.extend([str(f) for f in files])
-    sigstore_verify_args.extend([str(f) for f in files])
+    sigstore_sign_args.extend(str(f) for f in files)
+    sigstore_verify_args.extend(str(f) for f in files)
 
 _debug(f"signing: sigstore-python {[str(a) for a in sigstore_sign_args]}")
 
