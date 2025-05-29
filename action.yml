@@ -101,7 +101,7 @@ runs:
         GHA_SIGSTORE_PYTHON_INPUTS: "${{ inputs.inputs }}"
       shell: bash
 
-    - uses: softprops/action-gh-release@release/v2
+    - uses: softprops/action-gh-release@v2
       if: inputs.release-signing-artifacts == 'true' && github.event_name == 'release' && github.event.action == 'published'
       with:
         files: "${{ env.GHA_SIGSTORE_PYTHON_INTERNAL_SIGNING_ARTIFACTS }}"
