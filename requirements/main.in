@@ -1,2 +1,2 @@
-sigstore == 3.6.3
+sigstore == 3.6.4
 requests == 2.32.4
