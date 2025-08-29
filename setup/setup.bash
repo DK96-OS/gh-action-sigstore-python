@@ -45,7 +45,7 @@ vers=$(python -V | cut -d ' ' -f2)
 maj_vers=$(cut -d '.' -f1 <<< "${vers}")
 min_vers=$(cut -d '.' -f2 <<< "${vers}")
 
-[[ "${maj_vers}" == "3" && "${min_vers}" -ge 9 ]] || die "Bad Python version: ${vers}"
+[[ "${maj_vers}" == "3" && "${min_vers}" -ge 13 ]] || die "Bad Python version: ${vers}"
 
 # If the user didn't explicitly configure a Python version with
 # `actions/setup-python`, then we might be using the distribution's Python and
