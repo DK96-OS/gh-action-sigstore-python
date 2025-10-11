@@ -23,5 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pip-tools==7.5.1
 
+      - uses: actions/checkout@v5
+      
       - name: Compile
         run: pip-compile --generate-hashes --output-file=requirements/main.txt requirements/main.in
