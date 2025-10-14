@@ -32,4 +32,4 @@ jobs:
       - uses: actions/checkout@v5
       
       - name: Compile
-        run: pip-compile --generate-hashes --output-file=requirements/main.txt requirements/main.in
+        run: pip-compile --generate-hashes --upgrade --output-file=requirements/main.txt requirements/main.in
